@@ -17,10 +17,9 @@ defmodule ModernArtWeb.Router do
   scope "/", ModernArtWeb do
     pipe_through :browser
 
-    # live "/", PageLive, :index
     get "/", GameController, :new
-    get "/:name", GameController, :show
     post "/new", GameController, :create
+    live "/:name", PageLive, :index
   end
 
   # Other scopes may use custom stacks.

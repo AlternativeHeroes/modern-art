@@ -1,39 +1,46 @@
 defmodule ModernArtWeb.PageLive do
+  require Logger
   use ModernArtWeb, :live_view
+  alias ModernArt.Games
+  alias Phoenix.PubSub
+
+  @topic inspect(__MODULE__)
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+  def mount(%{"name" => name}, _session, socket) do
+    PubSub.subscribe(ModernArt.PubSub, topic(name))
+    game = Games.by_name!(name)
+    {:ok, assign(socket,
+      game: game,
+      msgs: [],
+    )}
   end
 
-  @impl true
-  def handle_event("suggest", %{"q" => query}, socket) do
-    {:noreply, assign(socket, results: search(query), query: query)}
+  defp broadcast(socket, event) do
+    PubSub.broadcast(
+      ModernArt.PubSub,
+      topic(socket.assigns.game.name),
+      event
+    )
+    socket
   end
 
-  @impl true
-  def handle_event("search", %{"q" => query}, socket) do
-    case search(query) do
-      %{^query => vsn} ->
-        {:noreply, redirect(socket, external: "https://hexdocs.pm/#{query}/#{vsn}")}
-
-      _ ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "No dependencies found matching \"#{query}\"")
-         |> assign(results: %{}, query: query)}
-    end
+  defp noreply(socket) do
+    {:noreply, socket}
   end
 
-  defp search(query) do
-    if not ModernArtWeb.Endpoint.config(:code_reloader) do
-      raise "action disabled when not in development"
-    end
-
-    for {app, desc, vsn} <- Application.started_applications(),
-        app = to_string(app),
-        String.starts_with?(app, query) and not List.starts_with?(desc, ~c"ERTS"),
-        into: %{},
-        do: {app, vsn}
+  def handle_event("send-message", %{"message" => msg}, socket) do
+    socket
+    |> broadcast({:new_msg, msg})
+    |> noreply
   end
+
+  def handle_info({:new_msg, msg}, socket) do
+    socket
+    |> assign(msgs: socket.assigns.msgs ++ [msg])
+    |> noreply
+  end
+  
+  defp topic(), do: @topic
+  defp topic(game_name), do: topic() <> to_string(game_name)
 end

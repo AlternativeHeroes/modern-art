@@ -14,7 +14,7 @@ defmodule ModernArtWeb.GameController do
       {:ok, game} ->
         conn
         |> put_flash(:info, "Game created successfully.")
-        |> redirect(to: Routes.game_path(conn, :show, game.name))
+        |> redirect(to: Routes.page_path(conn, :index, game.name))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

@@ -21,10 +21,10 @@ defmodule ModernArtWeb.GameControllerTest do
 
       assert %{name: name} = redirected_params(conn)
       name = URI.decode(name)
-      assert redirected_to(conn) == Routes.game_path(conn, :show, name)
+      assert redirected_to(conn) == Routes.page_path(conn, :index, name)
 
-      conn = get(conn, Routes.game_path(conn, :show, name))
-      assert html_response(conn, 200) =~ "Show Game"
+      conn = get(conn, Routes.page_path(conn, :index, name))
+      assert html_response(conn, 200) =~ "Welcome to"
     end
   end
 end
