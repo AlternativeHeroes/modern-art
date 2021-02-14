@@ -5,11 +5,8 @@
     </div>
   <% end %>
 
-  <%= label f, :name %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
-
   <div>
-    <%= submit "Save" %>
+    <%= submit "New Game" %>
   </div>
 <% end %>
+

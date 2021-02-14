@@ -53,10 +53,20 @@ defmodule ModernArt.Games do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_game(attrs \\ %{}) do
+  def create_game() do
     %Game{}
-    |> Game.changeset(attrs)
+    |> Game.changeset(%{name: generate_name()})
     |> Repo.insert()
+  end
+
+  @doc """
+  Generates a random name for a game.
+
+  TODO add more entropy, make names more fun?
+  3% chance of collision at 1000 items
+  """
+  def generate_name() do
+    Enum.random(0..0xffffff) |> Integer.to_string(16)
   end
 
   @doc """

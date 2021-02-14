@@ -3,11 +3,8 @@ defmodule ModernArtWeb.GameControllerTest do
 
   alias ModernArt.Games
 
-  @create_attrs %{name: "some name"}
-  @invalid_attrs %{name: nil}
-
   def fixture(:game) do
-    {:ok, game} = Games.create_game(@create_attrs)
+    {:ok, game} = Games.create_game()
     game
   end
 
@@ -19,8 +16,8 @@ defmodule ModernArtWeb.GameControllerTest do
   end
 
   describe "create game" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.game_path(conn, :create), game: @create_attrs)
+    test "redirects to show", %{conn: conn} do
+      conn = post(conn, Routes.game_path(conn, :create))
 
       assert %{name: name} = redirected_params(conn)
       name = URI.decode(name)
@@ -28,11 +25,6 @@ defmodule ModernArtWeb.GameControllerTest do
 
       conn = get(conn, Routes.game_path(conn, :show, name))
       assert html_response(conn, 200) =~ "Show Game"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.game_path(conn, :create), game: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Game"
     end
   end
 end

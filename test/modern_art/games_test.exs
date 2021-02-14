@@ -6,16 +6,11 @@ defmodule ModernArt.GamesTest do
   describe "games" do
     alias ModernArt.Games.Game
 
-    @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
-    def game_fixture(attrs \\ %{}) do
-      {:ok, game} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Games.create_game()
-
+    def game_fixture() do
+      {:ok, game} = Games.create_game()
       game
     end
 
@@ -30,12 +25,8 @@ defmodule ModernArt.GamesTest do
     end
 
     test "create_game/1 with valid data creates a game" do
-      assert {:ok, %Game{} = game} = Games.create_game(@valid_attrs)
-      assert game.name == "some name"
-    end
-
-    test "create_game/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Games.create_game(@invalid_attrs)
+      assert {:ok, %Game{} = game} = Games.create_game()
+      assert game.name != ""
     end
 
     test "update_game/2 with valid data updates the game" do
