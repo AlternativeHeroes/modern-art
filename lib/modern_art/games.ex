@@ -37,6 +37,10 @@ defmodule ModernArt.Games do
   """
   def get_game!(id), do: Repo.get!(Game, id)
 
+  def by_name!(name) do
+    Repo.get_by(Game, name: name) # -> [ {:name, name } ]
+  end
+
   @doc """
   Creates a game.
 
