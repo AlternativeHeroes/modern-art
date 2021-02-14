@@ -3,9 +3,9 @@ use Mix.Config
 # Configure your database
 config :modern_art, ModernArt.Repo,
   username: "postgres",
-  password: "postgres",
+  password: System.get_env("PGPASSWORD") || "postgres",
   database: "modern_art_dev",
-  hostname: "localhost",
+  hostname: System.get_env("PGHOST") || "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

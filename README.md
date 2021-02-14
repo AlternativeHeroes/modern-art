@@ -1,8 +1,13 @@
 # ModernArt
 
+Install dependencies
+  * Node 12 (protip: use [nvm](https://github.com/nvm-sh/nvm))
+  * Docker and [Docker Compose](https://docs.docker.com/compose/install/)
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
+  * Start database with `docker-compose up -d`
   * Create and migrate your database with `mix ecto.setup`
   * Install Node.js dependencies with `npm install` inside the `assets` directory (use Node 12)
   * Start Phoenix endpoint with `mix phx.server`
